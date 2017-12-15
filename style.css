@@ -69,6 +69,7 @@ th, td {
     padding: 8px;
 }
 
+  
 
 tbody > tr:hover:not(.active) {
     background-color: #adf;
