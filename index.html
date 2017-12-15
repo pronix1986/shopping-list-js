@@ -12,25 +12,92 @@
     </head>
     
     <body>
-        <nav class="menu">
+        <nav>
             <ul class="nav nav-pills nav-stacked">
-                <li><a class="active" href="#">Shopping list</a></li>
-                <li><a href="#">Done</a></li>
-                <li><a href="#">Deleted</a></li>
+                <li><a class="active" href="#shopping-list">Shopping list</a></li>
+                <li><a href="#done-list">Done</a></li>
+                <li><a href="#deleted-list">Deleted</a></li>
             </ul>
         </nav>
+        <section id="page" class="page">
+            <section id="shopping-list" class="section section-header section-form">
+                <h1>Shopping List</h1>
+                <form>
+                    <input id="item"></input> <a id="add-item" href=#><strong>+</strong> Add</a>
+    
+                    <ul id="items"></ul>
+                     <h3>Purchased</h3>
+    
+                    <ul id="purchased"></ul>
+                </form>
+            </section>
+    
+            <section id="done-list" class="section section-header">
+                <h1>Done List</h1>
+            </section>
+    
+            <section id="deleted-list" class="section section-header">
+                <h1>Deleted List</h1>
+            </section>
 
-        <article id="shopping-list" class="article">
-            <h1>Shopping List</h1>
-            <form>
-                <input id="item"></input> <a id="add-item" href=#><strong>+</strong> Add</a>
+            <section id="result-table" class="section section-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Done</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price $</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                                <td>1</td>
+                                <td><input type="checkbox" name="done" value="done"></td>
+                                <td>TEST1</td>
+                                <td>1</td>
+                                <td>120</td>
+                                <td></td>
+                        </tr>
+                        <tr>
+                                <td>2</td>
+                                <td><input type="checkbox" name="done" value="done"></td>
+                                <td>TEST2</td>
+                                <td>210</td>
+                                <td>200</td>
+                                <td></td>
+                        </tr>
+                        <tr>
+                                <td>3</td>
+                                <td><input type="checkbox" name="done" value="done"></td>
+                                <td>TEST3</td>
+                                <td>130</td>
+                                <td>10</td>
+                                <td></td>
+                        </tr>
 
-                <ul id="items"></ul>
-                 <h3>Purchased</h3>
 
-                <ul id="purchased"></ul>
-            </form>
-        </article>
+
+
+
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total:</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </section>
+        </section>
+        
 
     </body>
 
