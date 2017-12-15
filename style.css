@@ -75,8 +75,6 @@ tbody > tr:hover:not(.active) {
     background-color: #adf;
     color: white;
 }
-
-
 tfoot {
     background-color: #e6e6e6;
 }
