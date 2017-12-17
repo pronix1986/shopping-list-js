@@ -149,7 +149,7 @@ button > span {
     visibility: hidden;
 }
 
-[data-tooltip]:hover:after {
+[data-tooltip]:hover::after {
     visibility: visible;
     content: attr(data-tooltip);
     text-align: center;
@@ -159,3 +159,4 @@ button > span {
     background-color: white;
     position: absolute;
 }
+
