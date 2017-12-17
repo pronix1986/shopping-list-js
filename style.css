@@ -115,3 +115,27 @@ input[type=text] {
 #pname {
     width: 50%;
 }
+
+button {
+    border-radius: 4px;
+    padding: 10px;
+    border: none;
+    text-align: center;
+    color: white;
+}
+
+.button-edit {
+    background-color: orange;
+}
+
+.button-delete {
+    background-color: red;
+}
+
+.button-edit:hover {
+    background-color: #DF8F06;
+}
+
+.button-delete:hover {
+    background-color: #CC0707;
+}
