@@ -121,7 +121,12 @@ button {
     padding: 10px;
     border: none;
     text-align: center;
+    vertical-align: middle;
     color: white;
+}
+
+button > span {
+    font-weight: bold;
 }
 
 .button-edit {
@@ -138,4 +143,19 @@ button {
 
 .button-delete:hover {
     background-color: #CC0707;
+}
+
+[data-tooltip]:after {
+    visibility: hidden;
+}
+
+[data-tooltip]:hover:after {
+    visibility: visible;
+    content: attr(data-tooltip);
+    text-align: center;
+    font-size: 0.8em;
+    color: black;
+    border: 1px solid black;
+    background-color: white;
+    position: absolute;
 }
