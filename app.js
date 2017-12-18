@@ -58,8 +58,16 @@ function displayTab(tabName) {
     scrollTo(0,0);
 }
 
+function updateMenubar(newActiveElement) {
+    let oldActiveElement = document.querySelector("nav > ul > li > a.active");
+    oldActiveElement.classList.remove("active");
+    newActiveElement.classList.add("active");
+}
+
 function handleTabClick(event) {
-    let sectionName = event.target.getAttribute('href').substring(1);
+    let target = event.target;
+    let sectionName = target.getAttribute('href').substring(1);
     displayTab(sectionName);
+    updateMenubar(target);
 }
 
