@@ -46,7 +46,10 @@ section {
 
 .section-header {
     background-color: #e6e6e6;
-    
+}
+
+.section-table {
+    padding: 20px 0;
 }
 
 section > h1 {
