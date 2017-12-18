@@ -12,14 +12,14 @@
     
     <body>
         <nav>
-            <ul class="nav nav-pills nav-stacked">
+            <ul class="nav nav-pills nav-stacked" onclick="handleTabClick(event)">
                 <li><a class="active" href="#shopping-list">Shopping list</a></li>
                 <li><a href="#done-list">Done</a></li>
                 <li><a href="#deleted-list">Deleted</a></li>
             </ul>
         </nav>
         <section id="page" class="page">
-            <section id="shopping-list" class="section-header section-form">
+            <section id="shopping-list" class="section section-header section-form">
                 <h1>Shopping List</h1>
                 <hr/>
                 <form id="pform" method="POST">
@@ -32,11 +32,11 @@
                 </form>
             </section>
     
-            <section id="done-list" class="section-header">
+            <section id="done-list" class="section section-header">
                 <h1>Done List</h1>
             </section>
     
-            <section id="deleted-list" class="section-header">
+            <section id="deleted-list" class="section section-header">
                 <h1>Deleted List</h1>
             </section>
 
@@ -53,52 +53,7 @@
                         </tr>
                     </thead>
                     <tbody id="items">
-                        <!-- For test purposes only -->
-                        <!-- <tr>
-                            <td>1</td>
-                            <td><input type="checkbox" name="done" value="done"></td>
-                            <td>TEST1</td>
-                            <td>1</td>
-                            <td>120</td>
-                            <td>
-                                <button class="button-edit" data-tooltip="Edit">
-                                    <span>&#x270e;</span>
-                                </button>
-                                <button class="button-delete" data-tooltip="Delete">
-                                    <span>&#x274c;</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><input type="checkbox" name="done" value="done"></td>
-                            <td>TEST2</td>
-                            <td>210</td>
-                            <td>200</td>
-                            <td>
-                                <button class="button-edit" data-tooltip="Edit">
-                                    <span>&#x270e;</span>
-                                </button>
-                                <button class="button-delete" data-tooltip="Delete">
-                                    <span>&#x274c;</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><input type="checkbox" name="done" value="done"></td>
-                            <td>TEST3</td>
-                            <td>130</td>
-                            <td>10</td>
-                            <td>
-                                <button class="button-edit" data-tooltip="Edit">
-                                    <span>&#x270e;</span>
-                                </button>
-                                <button class="button-delete" data-tooltip="Delete">
-                                    <span>&#x274c;</span>
-                                </button>
-                            </td>
-                        </tr> -->
+                        <!-- For test purposes only --> <!-- <tr><td>1</td><td><input type="checkbox" name="done" value="done"></td><td>TEST1</td><td>1</td><td>120</td><td><button class="button-edit" data-tooltip="Edit"><span>&#x270e;</span></button><button class="button-delete" data-tooltip="Delete"><span>&#x274c;</span></button></td>32</tr><tr><td>2</td><td><input type="checkbox" name="done" value="done"></td><td>TEST2</td><td>210</td><td>200</td><td><button class="button-edit" data-tooltip="Edit"><span>&#x270e;</span></button><button class="button-delete" data-tooltip="Delete"><span>&#x274c;</span></button></td></tr><tr><td>3</td><td><input type="checkbox" name="done" value="done"></td><td>TEST3</td><td>130</td><td>10</td><td><button class="button-edit" data-tooltip="Edit"><span>&#x270e;</span></button><button class="button-delete" data-tooltip="Delete"><span>&#x274c;</span></button></td></tr> -->
                     </tbody>
                     <tfoot>
                         <tr>
@@ -107,7 +62,7 @@
                             <td></td>
                             <td></td>
                             <td>Total:</td>
-                            <td></td>
+                            <td id="total"></td>
                         </tr>
                     </tfoot>
                 </table>

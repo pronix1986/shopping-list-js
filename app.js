@@ -7,7 +7,6 @@ if (
     document.addEventListener("DOMContentLoaded", initForm);
 }
 
-
 function initForm() {
 
     // test values:
@@ -19,6 +18,8 @@ function initForm() {
     let itemArr = getArrFromLocalStorage('itemArr');
     let doneItemArr = getArrFromLocalStorage('doneItemArr');
     let deletedItemArr = getArrFromLocalStorage('deletedItemArr');
+    // open the first tab according to the task spec:
+    displayTab("shopping-list");
     
     itemArr.forEach((el, index) => addItemToTable(++index, el.done, el.name, el.quantity, el.price));
 
@@ -46,6 +47,19 @@ function initForm() {
         `;
         document.getElementById('items').appendChild(itemRow);
     }
-    
+
+
+
+}
+
+function displayTab(tabName) {
+    let sections = [...document.getElementsByClassName("section")]
+    sections.forEach(s => tabName===s.id ? s.style.display = 'inherit' : s.style.display = 'none')
+    scrollTo(0,0);
+}
+
+function handleTabClick(event) {
+    let sectionName = event.target.getAttribute('href').substring(1);
+    displayTab(sectionName);
 }
 
