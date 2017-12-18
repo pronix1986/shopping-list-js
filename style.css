@@ -148,6 +148,10 @@ button > span {
     background-color: #CC0707;
 }
 
+.button-group {
+    float: right;
+}
+
 [data-tooltip] {
     position: relative;
 }
@@ -174,3 +178,6 @@ button > span {
     opacity: 1;
 }
 
+#total {
+    text-align: right;
+}
