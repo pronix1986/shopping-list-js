@@ -12,18 +12,18 @@ function initForm() {
     /* test values: */
     if(getFromLocalStorage('itemArr').length === 0)
         setToLocalStorage('itemArr', [
-            {done: false, name: "Test1", quantity: 2, price: 100},
-            {done: false, name: "Test2", quantity: 1, price: 100}
+            {done: false, name: "Test1", quantity: "2", price: 100},
+            {done: false, name: "Test2", quantity: "1", price: 100}
         ]);
     if(getFromLocalStorage('doneItemArr').length === 0)
         setToLocalStorage('doneItemArr', [
-            {done: true, name: "Test3", quantity: 20, price: 20},
-            {done: true, name: "Test4", quantity: 8, price: 5}
+            {done: true, name: "Test3", quantity: "20", price: 20},
+            {done: true, name: "Test4", quantity: "8L", price: 5}
         ]);
     if(getFromLocalStorage('deletedItemArr'). length === 0)
         setToLocalStorage('deletedItemArr', [
-            {done: false, name: "Test5", quantity: 32, price: 150},
-            {done: true, name: "Test6", quantity: 21, price: 10}
+            {done: false, name: "Test5", quantity: "32", price: 150},
+            {done: true, name: "Test6", quantity: "21", price: 10}
         ])
 
     let sectionsArrs = {'itemArr': 'shopping-list' , 'doneItemArr': 'done-list', 'deletedItemArr': 'deleted-list'};
@@ -111,6 +111,12 @@ function updateResultTable(tabName) {
     addTotal(total);
 }
 
+function updateForm(isEditable) {
+    if(!isEditable) clearForm();
+    displayFormButton(isEditable);
+    setActiveRow(isEditable);
+}
+
 function initDefaultTab() {
     refreshPage('shopping-list')
 }
@@ -158,44 +164,74 @@ function deleteItem(event) {
     refreshPage(getCurrentSectionName());
 }
 
-function getIdFromEvent(event, setActive = false) {
+function getIdFromEvent(event) {
     let tr = findParentNodeByTag("tr", event.target);
-    if(setActive) {
-        tr.classList.add("active");
-    }
     return Number(tr.firstElementChild.innerHTML) - 1;
 }
 
-function toEditItemForm(event) {
-    displayFormButton(true);
+function setActiveRow(isActive) {
+    isActive ? 
+        findParentNodeByTag("tr", event.target).classList.add("active") : 
+        document.querySelector("tr.active").classList.remove("active");
+}
 
-    let id = getIdFromEvent(event, true);
+function toEditItemForm(event) {
+    updateForm(true);
+    let id = getIdFromEvent(event);
     let curArrName = getCurrentArrName()
     let curArr = getFromLocalStorage(curArrName);
     let item = curArr[id];
     document.getElementById('pname').value = item.name;
     document.getElementById('quantity').value = item.quantity;
-    document.getElementById('price').value = item.price;
-
+    document.getElementById('price').value = +item.price;
+    document.getElementById('pid').value = id;
+    
 }
 
 function editItem(event) {
+    let item = getItemFromForm();
+    let id = getItemIdFromForm();
+    updateForm(false);
+    let validationMessage = validateItem(item);
+    if(validationMessage) {
+        alert(validationMessage);
+        return false;
+    }
+    if(!validateItemChanged(item, id)) {
+        return false;
+    }
+    exchangeItem(id, 'itemArr', 'itemArr', () => item);
+    refreshPage(getCurrentSectionName());
+}
 
+function validateItemChanged(newItem, id) {
+    let curArr = getFromLocalStorage(getCurrentArrName());
+    let oldItem = curArr[id];
+    return !(JSON.stringify(oldItem) === JSON.stringify(newItem));
 }
 
 function addItem(event) {
-    let form = findParentNodeByTag("form", event.target);
-    let fName = form.elements[0].value;
-    let fQuantity = form.elements[1].value;
-    let fPrice = form.elements[2].value;
-    let item = {done: false, name: fName, quantity: fQuantity, price: fPrice}
-    let validationMessage = validateItem(item)
+    let item = getItemFromForm();
+    let validationMessage = validateItem(item);
     if(validationMessage) {
         alert(validationMessage);
         return false;
     }
     pushToArr('itemArr', item);
     refreshPage(getCurrentSectionName());
+}
+
+function getItemIdFromForm() {
+    let form = findParentNodeByTag("form", event.target);
+    return form.elements[3].value;
+}
+
+function getItemFromForm() {
+    let form = findParentNodeByTag("form", event.target);
+    let fName = form.elements[0].value;
+    let fQuantity = form.elements[1].value;
+    let fPrice = form.elements[2].value;
+    return {done: false, name: fName, quantity: fQuantity, price: fPrice};
 }
 
 function validateItem(item) {   
@@ -261,10 +297,21 @@ function pushToArr(arrName, item) {
     setToLocalStorage(arrName, arr);
 }
 
-function exchangeItem(sourceId, sourceArr, targetArr, map) {
-    let deleted = deleteFromArr(sourceArr, sourceId);
+function insertToArr(arrName, id, item) {
+    let arr = getFromLocalStorage(arrName);
+    arr.splice(id, 0, item);
+    setToLocalStorage(arrName, arr);
+}
+
+function exchangeItem(sourceId, sourceArrName, targetArrName, map) {
+    let deleted = deleteFromArr(sourceArrName, sourceId);
     let item = map ? map(deleted) : deleted;
-    pushToArr(targetArr, item);
+    if(sourceArrName !== targetArrName) {
+        pushToArr(targetArrName, item);
+    } else {
+        insertToArr(targetArrName, sourceId, item);
+    }
+
 }
 
 function findParentNodeByTag(parentTagName, childObj) {
