@@ -31,14 +31,6 @@ function initForm() {
     initDefaultTab();
 }
 
-function getFromLocalStorage(name, isArr = true) {
-    return localStorage.getItem(name) ? JSON.parse(localStorage.getItem(name)) : (isArr? [] : {})
-}
-
-function setToLocalStorage(name, obj) {
-    localStorage.setItem(name, JSON.stringify(obj));
-}
-
 function clearTable() {
     document.getElementById('items').innerHTML = '';
 }
@@ -47,7 +39,7 @@ function addItemToTable(index, done, name, quantity, price) {
     let itemRow = document.createElement("tr");
     itemRow.innerHTML = `
         <td>${index}</td>
-        <td><input type="checkbox" name="done" value="done" ${done?"checked":""}></td>
+        <td><input type="checkbox" name="done" value="done" onclick="onDone(event)" ${done?"checked":""}></td>
         <td>${name}</td>
         <td>${quantity}</td>
         <td>${price}</td>
@@ -132,40 +124,17 @@ function updateCurrentArrName(tabName) {
     }
 }
 
-function setCurrentArrName(arrName) {
-    localStorage.setItem("curArr", arrName);
-}
-
-function getCurrentArrName() {
-    return localStorage.getItem("curArr");
-}
-
 function deleteItem(event) {
     let id = getIdFromEvent(event);
-    let deletedItemArr = getFromLocalStorage('deletedItemArr');
     let curArrName = getCurrentArrName();
-    let curArr = getFromLocalStorage(curArrName);
-    let itemToRemove = curArr[id];
     if('deletedItemArr' !== curArrName) { 
-        deletedItemArr.push(itemToRemove);
-        setToLocalStorage('deletedItemArr', deletedItemArr);
-        curArr.splice(id, 1);
-        setToLocalStorage(curArrName, curArr);
+        exchangeItem(id, curArrName, 'deletedItemArr');
     } else {
         if(window.confirm('Delete the item permanently?')) {
-            deletedItemArr.splice(id, 1);
-            setToLocalStorage('deletedItemArr', deletedItemArr);
+            deleteFromArr('deletedItemArr', id);
         }
     }
-    refreshPage(getFromLocalStorage('sectionsArrs', false)[curArrName]);
-}
-
-function findParentNodeByTag(parentTagName, childObj) {
-    let testObj = childObj.parentNode;
-    while(testObj.tagName.toUpperCase() !== parentTagName.toUpperCase()) {
-        testObj = testObj.parentNode;
-    }
-    return testObj;
+    refreshPage(getCurrentSectionName());
 }
 
 function getIdFromEvent(event, setActive = false) {
@@ -181,7 +150,7 @@ function editItem(event) {
     let 
 }
 
-function addItem(some) {
+function addItem(event) {
     let form = findParentNodeByTag("form", event.target);
     let fName = form.elements[0].value;
     let fQuantity = form.elements[1].value;
@@ -189,17 +158,14 @@ function addItem(some) {
     let item = {done: false, name: fName, quantity: fQuantity, price: fPrice}
     let validationMessage = validateItem(item)
     if(validationMessage) {
-      //  console.log(`TODO: item validation message: ${validationMessage}`);
         alert(validationMessage);
         return false;
     }
-    let itemArr = getFromLocalStorage('itemArr');
-    itemArr.push(item);
-    setToLocalStorage('itemArr', itemArr);
-    location.reload();
+    pushToArr('itemArr', item);
+    refreshPage(getCurrentSectionName());
 }
 
-function validateItem(item) {   // TODO
+function validateItem(item) {   
     if(!item.name || !item.quantity || !item.price) {
         return "All fields are required";
     }
@@ -207,5 +173,72 @@ function validateItem(item) {   // TODO
         return "'Price' is invalid";
     }
     return "";                
+}
+
+function onDone(event) {
+    if('deletedItemArr' === getCurrentArrName()) {
+        return;
+    }
+    let id = getIdFromEvent(event);
+    if(event.target.checked === true) {
+        exchangeItem(id, 'itemArr', 'doneItemArr', (item => { 
+            item.done = true; 
+            return item;
+        }));
+    } else {
+        exchangeItem(id, 'doneItemArr', 'itemArr', (item => { 
+            item.done = false; 
+            return item;
+        }));
+    }
+    refreshPage(getCurrentSectionName());
+}
+
+/* Utility functions */
+function getFromLocalStorage(name, isArr = true) {
+    return localStorage.getItem(name) ? JSON.parse(localStorage.getItem(name)) : (isArr? [] : {})
+}
+
+function setToLocalStorage(name, obj) {
+    localStorage.setItem(name, JSON.stringify(obj));
+}
+
+function setCurrentArrName(arrName) {
+    localStorage.setItem("curArr", arrName);
+}
+
+function getCurrentArrName() {
+    return localStorage.getItem("curArr");
+}
+
+function getCurrentSectionName() {
+    return getFromLocalStorage('sectionsArrs', false)[getCurrentArrName()];
+}
+
+function deleteFromArr(arrName, id) {
+    let arr = getFromLocalStorage(arrName);
+    let deleted = arr.splice(id, 1);
+    setToLocalStorage(arrName, arr);
+    return deleted[0];
+}
+
+function pushToArr(arrName, item) {
+    let arr = getFromLocalStorage(arrName);
+    arr.push(item);
+    setToLocalStorage(arrName, arr);
+}
+
+function exchangeItem(sourceId, sourceArr, targetArr, map) {
+    let deleted = deleteFromArr(sourceArr, sourceId);
+    let item = map ? map(deleted) : deleted;
+    pushToArr(targetArr, item);
+}
+
+function findParentNodeByTag(parentTagName, childObj) {
+    let testObj = childObj.parentNode;
+    while(testObj.tagName.toUpperCase() !== parentTagName.toUpperCase()) {
+        testObj = testObj.parentNode;
+    }
+    return testObj;
 }
 
