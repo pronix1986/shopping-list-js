@@ -35,6 +35,26 @@ function clearTable() {
     document.getElementById('items').innerHTML = '';
 }
 
+function clearForm() {
+    document.getElementById("pform").reset();
+    displayFormButton(false);
+}
+
+function displayFormButton(isEditable) {
+    let add = document.getElementById('submit-add');
+    let edit = document.getElementById('submit-edit');
+    let resultTable = document.getElementById('result-table');
+    if(isEditable) {
+        edit.style.display = 'inherit';
+        add.style.display = 'none';
+        resultTable.style.pointerEvents = 'none';
+    } else {
+        edit.style.display = 'none';
+        add.style.display = 'inherit';
+        resultTable.style.pointerEvents = 'auto';
+    }
+}
+
 function addItemToTable(index, done, name, quantity, price) {
     let itemRow = document.createElement("tr");
     itemRow.innerHTML = `
@@ -45,7 +65,7 @@ function addItemToTable(index, done, name, quantity, price) {
         <td>${price}</td>
         <td>
             <div class="button-group">
-                <button class="button-edit" data-tooltip="Edit" onclick="editItem(event)">
+                <button class="button-edit" data-tooltip="Edit" onclick="toEditItemForm(event)">
                     <span>&#x270e;</span>
                 </button>
                 <button class="button-delete" data-tooltip="Delete" onclick="deleteItem(event)">
@@ -61,6 +81,7 @@ function addTotal(total) {
 }
 
 function displayTabHeader(tabName) {
+    clearForm();
     let sections = [...document.getElementsByClassName("section")];
     sections.forEach(s => tabName===s.id ? s.style.display = 'inherit' : s.style.display = 'none');
     scrollTo(0,0);
@@ -145,9 +166,21 @@ function getIdFromEvent(event, setActive = false) {
     return Number(tr.firstElementChild.innerHTML) - 1;
 }
 
-function editItem(event) {
+function toEditItemForm(event) {
+    displayFormButton(true);
+
     let id = getIdFromEvent(event, true);
-    let 
+    let curArrName = getCurrentArrName()
+    let curArr = getFromLocalStorage(curArrName);
+    let item = curArr[id];
+    document.getElementById('pname').value = item.name;
+    document.getElementById('quantity').value = item.quantity;
+    document.getElementById('price').value = item.price;
+
+}
+
+function editItem(event) {
+
 }
 
 function addItem(event) {
