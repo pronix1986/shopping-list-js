@@ -22,13 +22,12 @@
             <section id="shopping-list" class="section section-header section-form">
                 <h1>Shopping List</h1>
                 <hr/>
-                <form id="pform" method="POST">
+                <form id="pform" onsubmit="javascript:return false;">
                     <input id="pname" type="text" name="product-name">
                     <input id="quantity" type="text" name="quantity">
                     <input id="price" type="text" name="price">
-                    <input id="submit" type="submit" value="Add">
+                    <input id="submit" type="submit" value="Add" onclick="addItem(event)">
                     
-                    <!-- <a id="add-item" href=#><strong>+</strong> Add</a> -->
                 </form>
             </section>
     
